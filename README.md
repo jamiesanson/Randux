@@ -18,6 +18,16 @@ data class AppState(
 ): Parcelable, State
 ```
 
+Optionally define configuration:
+```kotlin
+class ReduxConfiguration: Configuration {
+
+  override fun getPersistenceType(): PersistenceType {
+    return Disk()
+  }
+}
+```
+
 In your application class, register the `Store`:
 
 ```kotlin
@@ -50,10 +60,17 @@ data class HomeState(
 class FetchItemsMiddleware<FetchItems> @Inject constructor(val itemsRepo: ItemsRepository): Middleware<FetchItems> {
 
   override fun call(action: FetchItems, actionTrigger: (Action) -> Unit) {
+    // Call callback with loading action
     actionTrigger(Loading)
-    itemsRepo.getItemsRx().subscribeBy(
-      onNext = { actionTrigger(Loaded(items = it)) }
-    )
+    
+    itemsRepo
+      .getItemsRx()
+      .subscribeBy(
+        onNext = { 
+          // When the item is loaded, fire callback again
+          actionTrigger(Loaded(items = it)) 
+        }
+      )
   }
 
 }
@@ -61,9 +78,11 @@ class FetchItemsMiddleware<FetchItems> @Inject constructor(val itemsRepo: ItemsR
 
 2. Create your local reducer; this is required:
 ```kotlin
-fun reduce(action: Action, oldState: HomeState): HomeState {
-  return when (action) {
-    is Loading -> oldState.copy(loading = true)
+class HomeReducer: Reducer {
+  override fun reduce(action: Action, oldState: HomeState): HomeState {
+   return when (action) {
+      is Loading -> oldState.copy(loading = true)
+   }
   }
 }
 ```
