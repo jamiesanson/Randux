@@ -21,39 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package io.github.koss.randux
 
 /**
- * Class implementing a Store
+ * Interface describing a reducer. Must explicitly describe which
+ * state this function reduces
  */
-class Store private constructor(
-        val initialState: State,
-        val configuration: Configuration
-){
+interface Reducer<T: State> {
 
-    companion object Builder {
-        private var initialState: State? = null
-        private var configuration: Configuration = object : Configuration() {}
-
-        @JvmStatic
-        fun withInitialState(state: State): Builder{
-            this.initialState = state
-            return this
-        }
-
-        @JvmStatic
-        fun applyConfiguration(configuration: Configuration): Builder {
-            this.configuration = configuration
-            return this
-        }
-
-        fun build(): Store {
-            return Store(
-                    initialState ?: throw IllegalStateException("You must provide an initial state"),
-                    configuration)
-        }
-    }
-
-    abstract class Configuration
-
+    /**
+     * Apply reduction to old state based on incoming action
+     */
+    fun reduce(action: Action, oldState: T): T
 }

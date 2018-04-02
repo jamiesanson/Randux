@@ -21,39 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package io.github.koss.randux
 
 /**
- * Class implementing a Store
+ * Interface describing middleware
  */
-class Store private constructor(
-        val initialState: State,
-        val configuration: Configuration
-){
-
-    companion object Builder {
-        private var initialState: State? = null
-        private var configuration: Configuration = object : Configuration() {}
-
-        @JvmStatic
-        fun withInitialState(state: State): Builder{
-            this.initialState = state
-            return this
-        }
-
-        @JvmStatic
-        fun applyConfiguration(configuration: Configuration): Builder {
-            this.configuration = configuration
-            return this
-        }
-
-        fun build(): Store {
-            return Store(
-                    initialState ?: throw IllegalStateException("You must provide an initial state"),
-                    configuration)
-        }
-    }
-
-    abstract class Configuration
-
+interface Middleware {
+    fun apply(action: Action, dispatcher: (Action) -> Unit)
 }
