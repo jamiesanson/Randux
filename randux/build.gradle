@@ -27,7 +27,16 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation "android.arch.lifecycle:livedata:1.1.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'io.arrow-kt:arrow-core:0.6.1'
+    implementation 'io.arrow-kt:arrow-syntax:0.6.1'
+    implementation 'io.arrow-kt:arrow-typeclasses:0.6.1'
+    implementation 'io.arrow-kt:arrow-data:0.6.1'
+    implementation 'io.arrow-kt:arrow-instances:0.6.1'
+    implementation 'io.arrow-kt:arrow-optics:0.6.1'
+    kapt 'io.arrow-kt:arrow-annotations-processor:0.6.1'
 }
 repositories {
     mavenCentral()

@@ -23,14 +23,42 @@
  */
 package io.github.koss.randux
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+
 /**
  * Class implementing a Store
  */
 class Store private constructor(
-        val initialState: State,
-        val configuration: Configuration
+        initialState: State,
+        private val configuration: Configuration
 ){
 
+    /**
+     * Internal state variable. Can be mapped to Rx if preferable
+     */
+    private val state = MutableLiveData<State>()
+
+    /**
+     * Internal actions stream
+     */
+    private val actions = MutableLiveData<Action>()
+
+    init {
+        state.value = initialState
+    }
+
+    fun applyMiddleware(middleware: List<Middleware>) {
+
+    }
+
+    fun <T: State> addReducer(reducer: Reducer<T>): LiveData<T> {
+
+    }
+
+    /**
+     * Builder implementation for the Store
+     */
     companion object Builder {
         private var initialState: State? = null
         private var configuration: Configuration = object : Configuration() {}
@@ -54,6 +82,15 @@ class Store private constructor(
         }
     }
 
-    abstract class Configuration
+    /**
+     * Abstract class for configuring Randux
+     */
+    abstract class Configuration {
+
+        /**
+         * Middleware to be applied on a global level
+         */
+        open val globalMiddleware: List<Middleware> = emptyList()
+    }
 
 }
