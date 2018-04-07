@@ -22,11 +22,12 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.core
+package io.github.koss.randux
 
 import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Option
+import io.github.koss.randux.core.*
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -53,15 +54,15 @@ fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
                     "Other middleware would not be applied to this dispatch."
             )}
 
-            var chain = emptyList<(Dispatch) -> Dispatch>()
+            var chain = emptyArray<(Dispatch) -> Dispatch>()
 
             val api = MiddlewareAPI(
                     getState = store::getState,
-                    dispatch = {_: Either<Action, AsyncAction> -> dispatch(Left(Unit))}
+                    dispatch = { _: Either<Action, AsyncAction> -> dispatch(Left(Unit)) }
             )
 
-            chain = middlewares.map { middleware -> middleware(api) }
-            dispatch = compose(*chain.toTypedArray())(store.dispatch)
+            chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()
+            dispatch = compose(*chain)(store.dispatch)
 
             return@inner store override dispatch
     }}
