@@ -58,7 +58,7 @@ fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
 
             val api = MiddlewareAPI(
                     getState = store::getState,
-                    dispatch = { _: Either<Action, AsyncAction> -> dispatch(Left(Unit)) }
+                    dispatch = { _: Either<AsyncAction, Action> -> dispatch(Left(Unit)) }
             )
 
             chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()

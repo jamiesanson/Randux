@@ -54,12 +54,12 @@ typealias Reducer = (currentState: State, incomingAction: Action) -> State
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#dispatching-function
  */
 typealias BaseDispatch = (Action) -> Action
-typealias Dispatch = (Either<Action, AsyncAction>) -> Option<Any>
+typealias Dispatch = (Either<AsyncAction, Action>) -> Option<Any>
 
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#action-creator
  */
-typealias ActionCreator = () -> Either<Action, AsyncAction>
+typealias ActionCreator = () -> Either<AsyncAction, Action>
 
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#async-action

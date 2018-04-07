@@ -24,6 +24,9 @@
 
 package io.github.koss.randux.utils
 
+/**
+ * Internal Redux ActionTypes
+ */
 enum class ActionTypes {
     INIT,
     REPLACE;
