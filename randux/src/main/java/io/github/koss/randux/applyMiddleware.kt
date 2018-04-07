@@ -27,7 +27,7 @@ package io.github.koss.randux
 import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Option
-import io.github.koss.randux.core.*
+import io.github.koss.randux.utils.*
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method

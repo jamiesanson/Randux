@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.core
+package io.github.koss.randux.utils
 
 import arrow.core.Either
 import arrow.core.Option

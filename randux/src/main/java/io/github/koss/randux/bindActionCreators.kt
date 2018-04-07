@@ -24,8 +24,8 @@
 
 package io.github.koss.randux
 
-import io.github.koss.randux.core.ActionCreator
-import io.github.koss.randux.core.Dispatch
+import io.github.koss.randux.utils.ActionCreator
+import io.github.koss.randux.utils.Dispatch
 
 fun bindActionCreator(actionCreator: ActionCreator, dispatch: Dispatch): ActionCreator {
     return inner@ {
