@@ -69,7 +69,7 @@ typealias AsyncAction = Any
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#middleware
  */
-open class MiddlewareAPI(val dispatch: Dispatch, val getState: () -> State)
+data class MiddlewareAPI(val dispatch: Dispatch, val getState: () -> State)
 typealias Middleware = (api: MiddlewareAPI) -> ((next: Dispatch) -> Dispatch)
 
 /**
