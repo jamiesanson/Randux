@@ -31,6 +31,7 @@ import javax.inject.Inject
 
 class MainReducer: Reducer {
     override fun invoke(currentState: State, incomingAction: Action): State {
+
         return currentState
     }
 }

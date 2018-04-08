@@ -24,37 +24,21 @@
 
 package io.github.koss.randux.sample.main
 
-import arrow.core.*
-import io.github.koss.randux.utils.*
-import io.reactivex.Completable
-import java.util.concurrent.TimeUnit
+import dagger.Module
+import dagger.Provides
+import dagger.multibindings.IntoSet
+import io.github.koss.randux.utils.Middleware
+import io.github.koss.randux.utils.Reducer
 
-class FakeApiMiddleware : Middleware {
-    override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch {
-        val (dispatch, _) = api
-        return { next ->
-            inner@ { action ->
-                return@inner when (action) {
-                    is Either.Left -> {
-                        // If the action is LoadSomething, consume the action and dispatch some new ones
-                        if (action.a == LoadSomething) {
-                            dispatch(Right(BeginLoad))
+@Module
+object MainModule {
 
-                            Completable.complete()
-                                    .delay(2000, TimeUnit.MILLISECONDS)
-                                    .subscribe {
-                                        dispatch(Right(FinishLoad))
-                                    }
+    @Provides
+    @IntoSet
+    fun provideMainReducer(): Reducer = MainReducer()
 
-                            None
-                        } else {
-                            next(action)
-                        }
-                    }
-                    is Either.Right -> next(action)
-                }
-            }
+    @Provides
+    @IntoSet
+    fun provideFakeApiMiddleware(): Middleware = FakeApiMiddleware()
 
-        }
-    }
 }

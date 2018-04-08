@@ -24,37 +24,10 @@
 
 package io.github.koss.randux.sample.main
 
-import arrow.core.*
-import io.github.koss.randux.utils.*
-import io.reactivex.Completable
-import java.util.concurrent.TimeUnit
+import io.github.koss.randux.utils.State
 
-class FakeApiMiddleware : Middleware {
-    override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch {
-        val (dispatch, _) = api
-        return { next ->
-            inner@ { action ->
-                return@inner when (action) {
-                    is Either.Left -> {
-                        // If the action is LoadSomething, consume the action and dispatch some new ones
-                        if (action.a == LoadSomething) {
-                            dispatch(Right(BeginLoad))
+object Empty: State()
 
-                            Completable.complete()
-                                    .delay(2000, TimeUnit.MILLISECONDS)
-                                    .subscribe {
-                                        dispatch(Right(FinishLoad))
-                                    }
+object Loading: State()
 
-                            None
-                        } else {
-                            next(action)
-                        }
-                    }
-                    is Either.Right -> next(action)
-                }
-            }
-
-        }
-    }
-}
+object Loaded: State()

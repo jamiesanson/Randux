@@ -22,39 +22,26 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample.main
+package io.github.koss.randux.sample
 
-import arrow.core.*
-import io.github.koss.randux.utils.*
-import io.reactivex.Completable
-import java.util.concurrent.TimeUnit
+import android.util.Log
+import io.github.koss.randux.utils.Dispatch
+import io.github.koss.randux.utils.Middleware
+import io.github.koss.randux.utils.MiddlewareAPI
 
-class FakeApiMiddleware : Middleware {
+class LoggingMiddleware: Middleware {
     override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch {
-        val (dispatch, _) = api
+        val (_, getState) = api
         return { next ->
             inner@ { action ->
-                return@inner when (action) {
-                    is Either.Left -> {
-                        // If the action is LoadSomething, consume the action and dispatch some new ones
-                        if (action.a == LoadSomething) {
-                            dispatch(Right(BeginLoad))
+                Log.d("Logger", "Dispatching action: $action")
+                val result = next(action)
+                Log.d("Logger", "Next state: ${getState()}")
 
-                            Completable.complete()
-                                    .delay(2000, TimeUnit.MILLISECONDS)
-                                    .subscribe {
-                                        dispatch(Right(FinishLoad))
-                                    }
-
-                            None
-                        } else {
-                            next(action)
-                        }
-                    }
-                    is Either.Right -> next(action)
-                }
+                return@inner result
             }
 
         }
     }
+
 }

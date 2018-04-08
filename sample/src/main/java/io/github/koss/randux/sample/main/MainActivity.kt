@@ -29,6 +29,8 @@ import android.os.Bundle
 import io.github.koss.randux.sample.R
 import io.github.koss.randux.sample.SampleApp
 
+import io.github.koss.randux.utils.State
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var unsubscribe: () -> Unit
@@ -37,8 +39,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        unsubscribe = (application as SampleApp).store.subscribe({
+        val store = (application as SampleApp).store
+        unsubscribe = store.subscribe({ onStateChanged(store.getState())})
+    }
 
-        })
+    private fun onStateChanged(state: State) {
+        when (state) {
+            Empty -> {}
+            Loading -> {}
+            Loaded -> {}
+        }
     }
 }

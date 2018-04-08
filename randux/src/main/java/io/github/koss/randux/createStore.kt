@@ -190,7 +190,6 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
                 )
             }
 
-
             try {
                 isDispatching = true
                 currentState = Some(currentReducer(Some(currentState), act))

@@ -22,43 +22,20 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample
+package io.github.koss.randux.sample.di
 
-import android.app.Application
-import arrow.core.Option
-import arrow.core.Some
-import io.github.koss.randux.applyMiddleware
-import io.github.koss.randux.combineReducers
-import io.github.koss.randux.createStore
-import io.github.koss.randux.sample.di.SampleComponent
-import io.github.koss.randux.sample.main.Empty
-import io.github.koss.randux.utils.State
-import io.github.koss.randux.utils.Store
+import dagger.Component
+import io.github.koss.randux.sample.main.MainModule
+import io.github.koss.randux.utils.Middleware
+import io.github.koss.randux.utils.Reducer
 
-class SampleApp: Application() {
+@Component(modules = [
+    SampleModule::class,
+    MainModule::class
+])
+interface SampleComponent {
 
-    lateinit var store: Store
+    fun reducers(): Set<Reducer>
+    fun middleware(): Set<Middleware>
 
-    lateinit var component: SampleComponent
-
-    private val preloadedState: Option<State>
-        get() = Option.fromNullable(loadState())
-
-    override fun onCreate() {
-        super.onCreate()
-
-        val reducers = component.reducers().toTypedArray()
-        val middleware = component.middleware().toTypedArray()
-
-        store = createStore(
-                reducer = combineReducers(*reducers),
-                preloadedState = preloadedState,
-                enhancer = Some(applyMiddleware(*middleware))
-        )
-    }
-
-    private fun loadState(): State? {
-        // TODO: Load state from somewhere
-        return Empty
-    }
 }
