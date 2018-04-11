@@ -22,48 +22,28 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample.main
+package io.github.koss.randux.extensions
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import io.github.koss.randux.extensions.dispatchAsync
-import io.github.koss.randux.sample.R
-import io.github.koss.randux.sample.SampleApp
-
+import arrow.core.Left
+import arrow.core.Option
+import io.github.koss.randux.utils.AsyncAction
 import io.github.koss.randux.utils.State
 import io.github.koss.randux.utils.Store
-import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.contentView
-import org.jetbrains.anko.design.snackbar
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
-class MainActivity : AppCompatActivity() {
+/**
+ * Get the stores global state as an observable. Create a new observable on each value read such
+ * that disposing doesn't unsubscribe all observers
+ */
+val Store.globalStateRx: Observable<State>
+    get() {
+        val subject = PublishSubject.create<State>()
+        val unsubscribe = subscribe({ subject.onNext(getState()) })
+        subject.doOnDispose { unsubscribe() }
 
-    private lateinit var unsubscribe: () -> Unit
-
-    private lateinit var store: Store
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        store = (application as SampleApp).store
-        unsubscribe = store.subscribe({ onStateChanged(store.getState()) })
-
-        loadButton.setOnClickListener { _ ->
-            store.dispatchAsync(LoadSomething)
-        }
+        return subject
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unsubscribe()
-    }
-
-    private fun onStateChanged(state: State) {
-        when (state) {
-            Empty -> {}
-            Loading -> { snackbar(contentView!!, "Loading") }
-            Loaded -> { snackbar(contentView!!, "Loaded") }
-        }
-    }
-}
+fun Store.dispatchAsync(action: AsyncAction): Option<Any> =
+    dispatch(Left(action))

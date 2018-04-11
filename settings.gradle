@@ -1,1 +1,1 @@
-include ':randux', ':sample'
+include ':randux', ':randux-extensions', ':sample'
