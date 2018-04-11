@@ -36,10 +36,14 @@ class TestApp: Application() {
   lateinit var store: Store
 
   override fun onCreate() {
-    store = Store
-      .withInitialState(AppState())
-      .applyConfiguration(Configuration()) // Configure Randux however you want
-      .create()
+      val reducers = setOf<Reducer>()
+      val middleware = setOf<Middleware>()
+
+      store = createStore(
+              reducer = combineReducers(*reducers),
+              preloadedState = preloadedState,
+              enhancer = Some(applyMiddleware(*middleware))
+      )
   }
 }
 ```
@@ -57,51 +61,41 @@ data class HomeState(
 
 1. Create some middleware for your usecases. These could be logging middleware, crash reporting, or async things like:
 ```kotlin
-class FetchItemsMiddleware<FetchItems> @Inject constructor(val itemsRepo: ItemsRepository): Middleware<FetchItems> {
+class LoggingMiddleware: Middleware {
+    override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch {
+        val (_, getState) = api
+        return { next ->
+            inner@ { action ->
+                Log.d("Logger", "Dispatching action: $action")
+                val result = next(action)
+                Log.d("Logger", "Next state: ${getState.invoke()}")
 
-  override fun call(action: FetchItems, actionTrigger: (Action) -> Unit) {
-    // Call callback with loading action
-    actionTrigger(Loading)
-    
-    itemsRepo
-      .getItemsRx()
-      .subscribeBy(
-        onNext = { 
-          // When the item is loaded, fire callback again
-          actionTrigger(Loaded(items = it)) 
+                return@inner result
+            }
         }
-      )
-  }
-
+    }
 }
 ```
 
 2. Create your local reducer; this is required:
 ```kotlin
-class HomeReducer: Reducer {
-  override fun reduce(action: Action, oldState: HomeState): HomeState {
-   return when (action) {
-      is Loading -> oldState.copy(loading = true)
-   }
-  }
+class SimpleAsyncReducer: Reducer {
+    override fun invoke(currentState: State, incomingAction: Action): State =
+            when (incomingAction) {
+                BeginLoad -> Loading
+                FinishLoad -> Loaded
+                else -> currentState
+            }
 }
 ```
 
 3. Rest of the owl:
 ```kotlin
 class HomeFragment: Fragment() {
-
-  @Inject
-  lateinit var middleware: List<Middleware>
-  
-  @Inject
-  lateinit var reducer: Reducer
   
   override fun onCreate(savedInstanceState: Bundle) {
     application.store
-      .applyMiddleware(middleware)
-      .addReducer(reducer)
-      .observeState(::onStateChanged)
+      .subscribe({ onStateChanged(store.getState()) })
   }
   
   private fun onStateChanged(homeState: HomeState) {
