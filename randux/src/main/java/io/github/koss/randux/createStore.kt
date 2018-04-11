@@ -90,7 +90,7 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
                 )
             }
 
-            return currentState
+            return currentState.getOrElse { "Empty" }
         }
 
         /**

@@ -27,11 +27,12 @@ package io.github.koss.randux.sample.main
 import io.github.koss.randux.utils.Action
 import io.github.koss.randux.utils.Reducer
 import io.github.koss.randux.utils.State
-import javax.inject.Inject
 
 class MainReducer: Reducer {
-    override fun invoke(currentState: State, incomingAction: Action): State {
-
-        return currentState
-    }
+    override fun invoke(currentState: State, incomingAction: Action): State =
+            when (incomingAction) {
+                BeginLoad -> Loading
+                FinishLoad -> Loaded
+                else -> currentState
+            }
 }

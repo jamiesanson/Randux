@@ -54,11 +54,11 @@ fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
                     "Other middleware would not be applied to this dispatch."
             )}
 
-            var chain = emptyArray<(Dispatch) -> Dispatch>()
+            var chain: Array<(Dispatch) -> Dispatch> = emptyArray()
 
             val api = MiddlewareAPI(
                     getState = store::getState,
-                    dispatch = { _: Either<AsyncAction, Action> -> dispatch(Left(Unit)) }
+                    dispatch = { action: Either<AsyncAction, Action> -> dispatch(action) }
             )
 
             chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()

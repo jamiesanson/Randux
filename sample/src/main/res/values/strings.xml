@@ -24,4 +24,5 @@
 
 <resources>
     <string name="app_name">Randux Sample</string>
+    <string name="begin_load">Begin load</string>
 </resources>

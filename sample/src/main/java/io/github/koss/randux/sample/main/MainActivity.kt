@@ -26,28 +26,44 @@ package io.github.koss.randux.sample.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import arrow.core.Either
 import io.github.koss.randux.sample.R
 import io.github.koss.randux.sample.SampleApp
 
 import io.github.koss.randux.utils.State
+import io.github.koss.randux.utils.Store
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.contentView
+import org.jetbrains.anko.design.snackbar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var unsubscribe: () -> Unit
 
+    private lateinit var store: Store
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val store = (application as SampleApp).store
-        unsubscribe = store.subscribe({ onStateChanged(store.getState())})
+        store = (application as SampleApp).store
+        unsubscribe = store.subscribe({ onStateChanged(store.getState()) })
+
+        loadButton.setOnClickListener { _ ->
+            store.dispatch(Either.Left(LoadSomething))
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unsubscribe()
     }
 
     private fun onStateChanged(state: State) {
         when (state) {
             Empty -> {}
-            Loading -> {}
-            Loaded -> {}
+            Loading -> { snackbar(contentView!!, "Loading") }
+            Loaded -> { snackbar(contentView!!, "Loaded") }
         }
     }
 }

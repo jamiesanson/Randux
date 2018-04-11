@@ -41,7 +41,7 @@ class FakeApiMiddleware : Middleware {
                             dispatch(Right(BeginLoad))
 
                             Completable.complete()
-                                    .delay(2000, TimeUnit.MILLISECONDS)
+                                    .delay(3000, TimeUnit.MILLISECONDS)
                                     .subscribe {
                                         dispatch(Right(FinishLoad))
                                     }

@@ -30,8 +30,11 @@ import arrow.core.Some
 import io.github.koss.randux.applyMiddleware
 import io.github.koss.randux.combineReducers
 import io.github.koss.randux.createStore
+import io.github.koss.randux.sample.di.DaggerSampleComponent
 import io.github.koss.randux.sample.di.SampleComponent
+import io.github.koss.randux.sample.di.SampleModule
 import io.github.koss.randux.sample.main.Empty
+import io.github.koss.randux.sample.main.MainModule
 import io.github.koss.randux.utils.State
 import io.github.koss.randux.utils.Store
 
@@ -46,6 +49,11 @@ class SampleApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        component = DaggerSampleComponent.builder()
+                .sampleModule(SampleModule())
+                .mainModule(MainModule)
+                .build()
 
         val reducers = component.reducers().toTypedArray()
         val middleware = component.middleware().toTypedArray()

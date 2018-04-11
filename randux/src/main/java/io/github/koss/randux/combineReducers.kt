@@ -43,20 +43,20 @@ fun assertReducerShape(vararg reducers: Reducer) {
 
         val initialState = reducer(initial, ActionTypes.INIT)
 
-        if (initialState == initial) {
+        if (initialState != initial) {
             throw IllegalArgumentException(
-                    "Reducer ${reducer::class.java.simpleName}" +
+                    "Reducer ${reducer::class.java.simpleName} " +
                             "returned undefined during initialization. " +
-                            "If the state passed to the reducer is undefined, you must" +
-                            "explicitly return the initial state. The initial state may" +
-                            "not be undefined. If you don't want to set a value for this reducer," +
+                            "If the state passed to the reducer is undefined, you must " +
+                            "explicitly return the initial state. The initial state may " +
+                            "not be undefined. If you don't want to set a value for this reducer, " +
                             "you can use null instead of undefined."
             )
         }
 
         val type = "@@randux/PROBE_UNKNOWN_ACTION_" +
                 Math.random().toString()
-        if (reducer(initial, { type }) == initial) {
+        if (reducer(initial, { type }) != initial) {
             throw IllegalArgumentException(
                     "Reducer ${reducer::class.java.simpleName} returned undefined when probed with a random type." +
                             "Don't try to handle ${ActionTypes.INIT} or other actions in the randux " +
