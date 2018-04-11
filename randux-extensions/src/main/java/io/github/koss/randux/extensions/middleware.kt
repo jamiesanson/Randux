@@ -24,14 +24,16 @@
 
 package io.github.koss.randux.extensions
 
+import arrow.core.Either
 import arrow.core.Option
 import io.github.koss.randux.utils.*
+import io.reactivex.disposables.Disposable
 
 /**
  * To remove some of the complicated currying that middleware entails, a user could use this function
  * and Kotlin delegation to simplify middleware creation
  */
-fun middleware(block: (api: MiddlewareAPI, next: Dispatch, action: Action) -> Option<Any>): Middleware {
+fun middleware(block: (api: MiddlewareAPI, next: Dispatch, action: Either<AsyncAction, Action>) -> Option<Any>): Middleware {
     return object : Middleware {
         override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch {
             return { next ->
@@ -41,4 +43,39 @@ fun middleware(block: (api: MiddlewareAPI, next: Dispatch, action: Action) -> Op
             }
         }
     }
+}
+
+/**
+ * Creates a middleware which handles a single disposable. A disposable handling mode can be
+ * set, allowing customisability of what happens when a new disposable is added
+ */
+fun disposableMiddleware(
+        mode: DisposableMode = DisposableMode.DISPOSE_OLD,
+        block: (api: MiddlewareAPI, next: Dispatch, action: Either<AsyncAction, Action>, setDisposable: (Disposable) -> Unit) -> Option<Any>): Middleware {
+    var disposable: Disposable? = null
+
+    return object : Middleware {
+        override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch {
+            return { next ->
+                inner@ { action ->
+                    return@inner block(api, next, action, { newDisposable ->
+                        when (mode) {
+                            DisposableMode.DISPOSE_OLD -> {
+                                disposable?.dispose()
+                                disposable = newDisposable
+                            }
+                            DisposableMode.DROP_NEW -> {
+                                newDisposable.dispose()
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+}
+
+enum class DisposableMode {
+    DISPOSE_OLD,
+    DROP_NEW
 }

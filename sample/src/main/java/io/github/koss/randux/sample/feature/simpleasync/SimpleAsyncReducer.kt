@@ -22,23 +22,17 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample.main
+package io.github.koss.randux.sample.feature.simpleasync
 
-import dagger.Module
-import dagger.Provides
-import dagger.multibindings.IntoSet
-import io.github.koss.randux.utils.Middleware
+import io.github.koss.randux.utils.Action
 import io.github.koss.randux.utils.Reducer
+import io.github.koss.randux.utils.State
 
-@Module
-object MainModule {
-
-    @Provides
-    @IntoSet
-    fun provideMainReducer(): Reducer = MainReducer()
-
-    @Provides
-    @IntoSet
-    fun provideFakeApiMiddleware(): Middleware = FakeApiMiddleware()
-
+class SimpleAsyncReducer: Reducer {
+    override fun invoke(currentState: State, incomingAction: Action): State =
+            when (incomingAction) {
+                BeginLoad -> Loading
+                FinishLoad -> Loaded
+                else -> currentState
+            }
 }

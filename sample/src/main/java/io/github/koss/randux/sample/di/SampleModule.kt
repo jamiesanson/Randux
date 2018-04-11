@@ -29,6 +29,7 @@ import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.github.koss.randux.sample.LoggingMiddleware
 import io.github.koss.randux.utils.Middleware
+import io.github.koss.randux.utils.Reducer
 
 @Module
 class SampleModule {
@@ -36,4 +37,8 @@ class SampleModule {
     @Provides
     @IntoSet
     fun provideLoggingMiddleware(): Middleware = LoggingMiddleware()
+
+    @Provides
+    @IntoSet
+    fun provideBuildFixingReducer(): Reducer = { state, _ -> state }
 }

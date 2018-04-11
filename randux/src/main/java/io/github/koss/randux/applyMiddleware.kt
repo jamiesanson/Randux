@@ -25,7 +25,6 @@
 package io.github.koss.randux
 
 import arrow.core.Either
-import arrow.core.Left
 import arrow.core.Option
 import io.github.koss.randux.utils.*
 
@@ -61,7 +60,7 @@ fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
                     dispatch = { action: Either<AsyncAction, Action> -> dispatch(action) }
             )
 
-            chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()
+            chain = arrayOf(*middlewares).map { middleware -> middleware(api) }.toTypedArray()
             dispatch = compose(*chain)(store.dispatch)
 
             return@inner store override dispatch

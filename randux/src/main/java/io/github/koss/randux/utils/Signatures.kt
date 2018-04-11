@@ -53,7 +53,6 @@ typealias Reducer = (currentState: State, incomingAction: Action) -> State
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#dispatching-function
  */
-typealias BaseDispatch = (Action) -> Action
 typealias Dispatch = (Either<AsyncAction, Action>) -> Option<Any>
 
 /**

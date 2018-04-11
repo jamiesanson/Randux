@@ -33,8 +33,6 @@ import io.github.koss.randux.createStore
 import io.github.koss.randux.sample.di.DaggerSampleComponent
 import io.github.koss.randux.sample.di.SampleComponent
 import io.github.koss.randux.sample.di.SampleModule
-import io.github.koss.randux.sample.main.Empty
-import io.github.koss.randux.sample.main.MainModule
 import io.github.koss.randux.utils.State
 import io.github.koss.randux.utils.Store
 
@@ -52,7 +50,6 @@ class SampleApp: Application() {
 
         component = DaggerSampleComponent.builder()
                 .sampleModule(SampleModule())
-                .mainModule(MainModule)
                 .build()
 
         val reducers = component.reducers().toTypedArray()
@@ -67,6 +64,6 @@ class SampleApp: Application() {
 
     private fun loadState(): State? {
         // TODO: Load state from somewhere
-        return Empty
+        return null
     }
 }

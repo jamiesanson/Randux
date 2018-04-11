@@ -24,6 +24,7 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
@@ -49,12 +50,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':randux')
 
     // RxJava for Rx extensions
-    implementation "io.reactivex.rxjava2:rxjava:2.1.6"
+    implementation "io.reactivex.rxjava2:rxjava:2.1.9"
 
     implementation 'io.arrow-kt:arrow-core:0.6.1'
     implementation 'io.arrow-kt:arrow-syntax:0.6.1'

@@ -26,44 +26,18 @@ package io.github.koss.randux.sample.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import io.github.koss.randux.extensions.dispatchAsync
 import io.github.koss.randux.sample.R
-import io.github.koss.randux.sample.SampleApp
-
-import io.github.koss.randux.utils.State
-import io.github.koss.randux.utils.Store
+import io.github.koss.randux.sample.feature.simpleasync.SimpleAsyncActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.contentView
-import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var unsubscribe: () -> Unit
-
-    private lateinit var store: Store
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        store = (application as SampleApp).store
-        unsubscribe = store.subscribe({ onStateChanged(store.getState()) })
-
-        loadButton.setOnClickListener { _ ->
-            store.dispatchAsync(LoadSomething)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unsubscribe()
-    }
-
-    private fun onStateChanged(state: State) {
-        when (state) {
-            Empty -> {}
-            Loading -> { snackbar(contentView!!, "Loading") }
-            Loaded -> { snackbar(contentView!!, "Loaded") }
+        simpleAsyncButton.setOnClickListener { _ ->
+            startActivity<SimpleAsyncActivity>()
         }
     }
 }

@@ -22,17 +22,12 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample.main
+package io.github.koss.randux.sample.feature.simpleasync
 
-import io.github.koss.randux.utils.Action
-import io.github.koss.randux.utils.Reducer
 import io.github.koss.randux.utils.State
 
-class MainReducer: Reducer {
-    override fun invoke(currentState: State, incomingAction: Action): State =
-            when (incomingAction) {
-                BeginLoad -> Loading
-                FinishLoad -> Loaded
-                else -> currentState
-            }
-}
+object Empty: State()
+
+object Loading: State()
+
+object Loaded: State()

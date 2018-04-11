@@ -25,13 +25,11 @@
 package io.github.koss.randux.sample.di
 
 import dagger.Component
-import io.github.koss.randux.sample.main.MainModule
 import io.github.koss.randux.utils.Middleware
 import io.github.koss.randux.utils.Reducer
 
 @Component(modules = [
-    SampleModule::class,
-    MainModule::class
+    SampleModule::class
 ])
 interface SampleComponent {
 

@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample.main
+package io.github.koss.randux.sample.feature.simpleasync
 
-import io.github.koss.randux.utils.State
+import io.github.koss.randux.utils.Action
+import io.github.koss.randux.utils.AsyncAction
 
-object Empty: State()
+object LoadSomething: AsyncAction()
 
-object Loading: State()
+object BeginLoad: Action()
 
-object Loaded: State()
+object FinishLoad: Action()
