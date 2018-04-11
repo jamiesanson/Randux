@@ -27,7 +27,7 @@ package io.github.koss.randux.sample.di
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
-import io.github.koss.randux.sample.LoggingMiddleware
+import io.github.koss.randux.sample.util.LoggingMiddleware
 import io.github.koss.randux.utils.Middleware
 import io.github.koss.randux.utils.Reducer
 

@@ -31,7 +31,6 @@ import io.github.koss.randux.applyMiddleware
 import io.github.koss.randux.createStore
 import io.github.koss.randux.extensions.dispatchAsync
 import io.github.koss.randux.extensions.globalStateRx
-import io.github.koss.randux.sample.LoggingMiddleware
 import io.github.koss.randux.sample.R
 import io.github.koss.randux.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers

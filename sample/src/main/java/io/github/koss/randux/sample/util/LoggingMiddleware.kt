@@ -22,27 +22,26 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample
+package io.github.koss.randux.sample.util
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import android.util.Log
+import io.github.koss.randux.utils.Dispatch
+import io.github.koss.randux.utils.Middleware
+import io.github.koss.randux.utils.MiddlewareAPI
 
-import org.junit.Test
-import org.junit.runner.RunWith
+class LoggingMiddleware: Middleware {
+    override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch {
+        val (_, getState) = api
+        return { next ->
+            inner@ { action ->
+                Log.d("Logger", "Dispatching action: $action")
+                val result = next(action)
+                Log.d("Logger", "Next state: ${getState.invoke()}")
 
-import org.junit.Assert.*
+                return@inner result
+            }
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-@RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("io.github.koss.randux.sample", appContext.packageName)
+        }
     }
+
 }
