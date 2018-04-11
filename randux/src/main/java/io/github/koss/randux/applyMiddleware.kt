@@ -60,7 +60,7 @@ fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
                     dispatch = { action: Either<AsyncAction, Action> -> dispatch(action) }
             )
 
-            chain = arrayOf(*middlewares).map { middleware -> middleware(api) }.toTypedArray()
+            chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()
             dispatch = compose(*chain)(store.dispatch)
 
             return@inner store override dispatch
