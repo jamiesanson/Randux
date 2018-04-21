@@ -55,7 +55,7 @@ class ThunkActivity: AppCompatActivity() {
                     dispatch(right(FinishLoad))
                 }
 
-        Some("Test")
+        None
     }
 
     override fun onSupportNavigateUp(): Boolean {
