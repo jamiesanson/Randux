@@ -42,6 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".feature.simpleasync.SimpleAsyncActivity" />
+        <activity android:name=".feature.thunkasync.ThunkActivity" />
     </application>
 
 </manifest>

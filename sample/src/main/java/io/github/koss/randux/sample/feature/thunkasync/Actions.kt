@@ -22,27 +22,13 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.sample.main
+package io.github.koss.randux.sample.feature.thunkasync
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import io.github.koss.randux.sample.R
-import io.github.koss.randux.sample.feature.simpleasync.SimpleAsyncActivity
-import io.github.koss.randux.sample.feature.thunkasync.ThunkActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.startActivity
+import io.github.koss.randux.utils.Action
+import io.github.koss.randux.utils.AsyncAction
 
-class MainActivity : AppCompatActivity() {
+object LoadSomething: AsyncAction()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        simpleAsyncButton.setOnClickListener { _ ->
-            startActivity<SimpleAsyncActivity>()
-        }
+object BeginLoad: Action()
 
-        thunkAsyncButton.setOnClickListener { _ ->
-            startActivity<ThunkActivity>()
-        }
-    }
-}
+object FinishLoad: Action()

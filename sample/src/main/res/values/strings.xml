@@ -27,4 +27,5 @@
     <string name="begin_load">Begin load</string>
     <string name="start_simple_async">Start Simple Async example</string>
     <string name="simple_async_title">Simple Asynchronous Example</string>
+    <string name="thunk_async_title">Thunk Middleware Example</string>
 </resources>

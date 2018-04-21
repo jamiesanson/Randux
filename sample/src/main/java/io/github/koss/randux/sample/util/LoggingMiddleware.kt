@@ -36,12 +36,10 @@ class LoggingMiddleware: Middleware {
             inner@ { action ->
                 Log.d("Logger", "Dispatching action: $action")
                 val result = next(action)
-                Log.d("Logger", "Next state: ${getState.invoke()}")
+                Log.d("Logger", "Next state: ${getState()}")
 
                 return@inner result
             }
-
         }
     }
-
 }
