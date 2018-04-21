@@ -41,8 +41,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".feature.simpleasync.SimpleAsyncActivity" />
-        <activity android:name=".feature.thunkasync.ThunkActivity" />
+        <activity android:name=".examples.simpleasync.SimpleAsyncActivity" />
+        <activity android:name=".examples.thunkasync.ThunkActivity" />
     </application>
 
 </manifest>

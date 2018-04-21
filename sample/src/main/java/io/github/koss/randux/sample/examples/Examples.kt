@@ -1,9 +1,9 @@
-package io.github.koss.randux.sample.main
+package io.github.koss.randux.sample.examples
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
-import io.github.koss.randux.sample.feature.simpleasync.SimpleAsyncActivity
-import io.github.koss.randux.sample.feature.thunkasync.ThunkActivity
+import io.github.koss.randux.sample.examples.simpleasync.SimpleAsyncActivity
+import io.github.koss.randux.sample.examples.thunkasync.ThunkActivity
 
 val examples = listOf(
         Example("Simple Async Middleware", SimpleAsyncActivity::class.java),
