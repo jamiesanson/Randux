@@ -27,8 +27,6 @@ package io.github.koss.randux.sample.feature.thunkasync
 import io.github.koss.randux.utils.Action
 import io.github.koss.randux.utils.AsyncAction
 
-object LoadSomething: AsyncAction()
-
 object BeginLoad: Action()
 
 object FinishLoad: Action()

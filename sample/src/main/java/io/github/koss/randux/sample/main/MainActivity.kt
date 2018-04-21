@@ -27,8 +27,11 @@ package io.github.koss.randux.sample.main
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import io.github.koss.randux.sample.R
+import io.github.koss.randux.sample.example
 import io.github.koss.randux.sample.feature.simpleasync.SimpleAsyncActivity
 import io.github.koss.randux.sample.feature.thunkasync.ThunkActivity
+import io.github.koss.randux.sample.sectionTitle
+import io.github.koss.randux.sample.util.withModels
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 
@@ -37,12 +40,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        simpleAsyncButton.setOnClickListener { _ ->
-            startActivity<SimpleAsyncActivity>()
-        }
-
-        thunkAsyncButton.setOnClickListener { _ ->
-            startActivity<ThunkActivity>()
+        epoxyRecyclerView.withModels {
+            sectionTitle {
+                id("title")
+                title("Examples")
+            }
+            examples.forEach {
+                example {
+                    id(it.name)
+                    title(it.name)
+                    onClick { _ -> it.start(this@MainActivity) }
+                }
+            }
         }
     }
 }
