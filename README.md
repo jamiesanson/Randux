@@ -1,4 +1,6 @@
 # Randux
+[![](https://jitpack.io/v/k-oss/Randux.svg)](https://jitpack.io/#k-oss/Randux)
+
 Randux is a minimal Redux implementation for Android. It follows the official Redux.js docs as closely as possible including, quite importantly, middleware. 
 
 ## Supporting Technologies
