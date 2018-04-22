@@ -26,10 +26,8 @@ package io.github.koss.randux.sample.examples.simpleasync
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import arrow.core.Some
 import io.github.koss.randux.applyMiddleware
 import io.github.koss.randux.createStore
-import io.github.koss.randux.extensions.dispatchAsync
 import io.github.koss.randux.extensions.globalStateRx
 import io.github.koss.randux.sample.R
 import io.github.koss.randux.utils.*
@@ -64,8 +62,8 @@ class SimpleAsyncActivity: AppCompatActivity() {
 
         store = createStore(
                 reducer = SimpleAsyncReducer(),
-                preloadedState = Some(Empty),
-                enhancer = Some(applyMiddleware(FakeApiMiddleware()))
+                preloadedState = Empty,
+                enhancer = applyMiddleware(FakeApiMiddleware())
         )
 
         disposable = store.globalStateRx
@@ -73,7 +71,7 @@ class SimpleAsyncActivity: AppCompatActivity() {
                 .subscribe(::onNewState)
 
         loadButton.setOnClickListener { _ ->
-            store.dispatchAsync(LoadSomething)
+            store.dispatch(LoadSomething)
         }
     }
 

@@ -24,7 +24,6 @@
 
 package io.github.koss.randux
 
-import arrow.core.*
 import io.github.koss.randux.utils.*
 import java.util.*
 
@@ -53,11 +52,11 @@ import java.util.*
  * @returns {Store} A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes.
  */
-fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Option<StoreEnhancer> = None): Store {
+fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: StoreEnhancer? = null): Store {
     // Apply enhancer is it exists
-    if (enhancer.isDefined()) {
-        val creator = { _reducer: Reducer, _preloadedState: Option<State> -> createStore(_reducer, _preloadedState) }
-        return enhancer.orNull()!!(creator)(reducer, preloadedState)
+    enhancer?.let {
+        val creator = { _reducer: Reducer, _preloadedState: State? -> createStore(_reducer, _preloadedState) }
+        return it(creator)(reducer, preloadedState)
     }
 
     return object : Store {
@@ -70,7 +69,7 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
         private var isDispatching = false
 
         init {
-            dispatch(Right(ActionTypes.INIT))
+            dispatch(ActionTypes.INIT)
         }
 
         fun ensureCanMutateNextListeners() {
@@ -90,7 +89,7 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
                 )
             }
 
-            return currentState.getOrElse { "Empty" }
+            return currentState ?: "Empty"
         }
 
         /**
@@ -176,13 +175,15 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
          * Note that, if you use a custom middleware, it may wrap `dispatch()` to
          * return something else (for example, a Promise you can await).
          */
-        fun dispatch(action: Either<AsyncAction, Action>): Option<Any> {
-            val act = action.getOrElse {
+        fun dispatch(action: Action): Any? {
+            if (action is AsyncAction) {
                 throw IllegalArgumentException(
                         "Actions must be an instance of Action. " +
                                 "Use custom middleware for AsyncAction."
                 )
             }
+
+            val act = action
 
             if (isDispatching) {
                 throw IllegalStateException(
@@ -192,7 +193,7 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
 
             try {
                 isDispatching = true
-                currentState = Some(currentReducer(Some(currentState), act))
+                currentState = currentReducer(currentState, act)
             } finally {
                 isDispatching = false
             }
@@ -203,7 +204,7 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
                 }
             }
 
-            return Some(act)
+            return act
         }
 
         /**
@@ -218,7 +219,7 @@ fun createStore(reducer: Reducer, preloadedState: Option<State>, enhancer: Optio
          */
         fun replaceReducer(nextReducer: Reducer) {
             currentReducer = nextReducer
-            dispatch(Right(ActionTypes.REPLACE))
+            dispatch(ActionTypes.REPLACE)
         }
 
         override val dispatch: Dispatch

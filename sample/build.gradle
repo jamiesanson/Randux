@@ -72,14 +72,6 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.11'
     compileOnly 'javax.annotation:jsr250-api:1.0'
 
-    implementation 'io.arrow-kt:arrow-core:0.6.1'
-    implementation 'io.arrow-kt:arrow-syntax:0.6.1'
-    implementation 'io.arrow-kt:arrow-typeclasses:0.6.1'
-    implementation 'io.arrow-kt:arrow-data:0.6.1'
-    implementation 'io.arrow-kt:arrow-instances:0.6.1'
-    implementation 'io.arrow-kt:arrow-optics:0.6.1'
-    kapt 'io.arrow-kt:arrow-annotations-processor:0.6.1'
-
     // For nice snackbar display etc.
     implementation "org.jetbrains.anko:anko-commons:0.10.4"
     implementation "org.jetbrains.anko:anko-design:0.10.4"

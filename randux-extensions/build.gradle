@@ -56,14 +56,6 @@ dependencies {
 
     // RxJava for Rx extensions
     implementation "io.reactivex.rxjava2:rxjava:2.1.9"
-
-    implementation 'io.arrow-kt:arrow-core:0.6.1'
-    implementation 'io.arrow-kt:arrow-syntax:0.6.1'
-    implementation 'io.arrow-kt:arrow-typeclasses:0.6.1'
-    implementation 'io.arrow-kt:arrow-data:0.6.1'
-    implementation 'io.arrow-kt:arrow-instances:0.6.1'
-    implementation 'io.arrow-kt:arrow-optics:0.6.1'
-    kapt 'io.arrow-kt:arrow-annotations-processor:0.6.1'
 }
 repositories {
     mavenCentral()

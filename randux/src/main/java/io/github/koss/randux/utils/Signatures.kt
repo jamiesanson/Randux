@@ -24,14 +24,9 @@
 
 package io.github.koss.randux.utils
 
-import arrow.core.Either
-import arrow.core.Option
-
 /**
  * This file is an implementation of signatures found in the official redux glossary. See here:
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md
- *
- * Arrow is used to implement Either and Option constructs.
  */
 
 /**
@@ -47,23 +42,23 @@ typealias Action = Any
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#reducer
  */
-typealias Reducer = (currentState: State, incomingAction: Action) -> State
+typealias Reducer = (currentState: State?, incomingAction: Action) -> State?
 
 
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#dispatching-function
  */
-typealias Dispatch = (Either<AsyncAction, Action>) -> Option<Any>
+typealias Dispatch = (Action) -> Any?
 
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#action-creator
  */
-typealias ActionCreator = () -> Either<AsyncAction, Action>
+typealias ActionCreator = () -> Action
 
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#async-action
  */
-typealias AsyncAction = Any
+interface AsyncAction
 
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#middleware
@@ -84,7 +79,7 @@ interface Store {
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#store-creator
  */
-typealias StoreCreator = (reducer: Reducer, preloadedState: Option<State>) -> Store
+typealias StoreCreator = (reducer: Reducer, preloadedState: State?) -> Store
 
 /**
  * https://github.com/reactjs/redux/blob/master/docs/Glossary.md#store-enhancer

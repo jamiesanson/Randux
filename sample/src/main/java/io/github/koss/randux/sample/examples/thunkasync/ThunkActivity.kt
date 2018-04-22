@@ -2,9 +2,6 @@ package io.github.koss.randux.sample.examples.thunkasync
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import arrow.core.Either.Companion.right
-import arrow.core.None
-import arrow.core.Some
 import io.github.koss.randux.applyMiddleware
 import io.github.koss.randux.createStore
 import io.github.koss.randux.extensions.globalStateRx
@@ -33,8 +30,8 @@ class ThunkActivity: AppCompatActivity() {
 
         store = createStore(
                 reducer = SimpleAsyncReducer(),
-                preloadedState = None,
-                enhancer = Some(applyMiddleware(ThunkMiddleware(), LoggingMiddleware()))
+                preloadedState = Empty,
+                enhancer = applyMiddleware(ThunkMiddleware(), LoggingMiddleware())
         )
 
         disposable = store.globalStateRx
@@ -42,20 +39,18 @@ class ThunkActivity: AppCompatActivity() {
                 .subscribe(::onNewState)
 
         loadButton.setOnClickListener { _ ->
-            store.dispatch(right(loadSomething()))
+            store.dispatch(loadSomething())
         }
     }
 
     private fun loadSomething(): ThunkFunction = { dispatch, _ ->
-        dispatch(right(BeginLoad))
+        dispatch(BeginLoad)
 
         Completable.complete()
                 .delay(3000, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    dispatch(right(FinishLoad))
+                    dispatch(FinishLoad)
                 }
-
-        None
     }
 
     override fun onSupportNavigateUp(): Boolean {

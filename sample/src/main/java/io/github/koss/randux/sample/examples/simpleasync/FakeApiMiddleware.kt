@@ -24,9 +24,6 @@
 
 package io.github.koss.randux.sample.examples.simpleasync
 
-import arrow.core.Either
-import arrow.core.None
-import arrow.core.Right
 import io.github.koss.randux.utils.Dispatch
 import io.github.koss.randux.utils.Middleware
 import io.github.koss.randux.utils.MiddlewareAPI
@@ -39,23 +36,18 @@ class FakeApiMiddleware: Middleware {
 
     override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch = { next -> inner@ { action ->
         return@inner when (action) {
-            is Either.Left -> {
+            is LoadSomething -> {
                 // If the action is LoadSomething, consume the action and dispatch some new ones
-                if (action.a == LoadSomething) {
-                    if (disposable?.isDisposed == false) disposable?.dispose()
+                if (disposable?.isDisposed == false) disposable?.dispose()
 
-                    api.dispatch(Right(BeginLoad))
+                api.dispatch(BeginLoad)
 
-                    disposable = Completable.complete()
-                            .delay(3000, TimeUnit.MILLISECONDS)
-                            .subscribe {
-                                api.dispatch(Right(FinishLoad))
-                            }
-                    None
-                } else {
-                    next(action)
-                }
+                disposable = Completable.complete()
+                        .delay(3000, TimeUnit.MILLISECONDS)
+                        .subscribe {
+                            api.dispatch(FinishLoad)
+                        }
             }
-            is Either.Right -> next(action)
+            else -> next(action)
     }}}
 }

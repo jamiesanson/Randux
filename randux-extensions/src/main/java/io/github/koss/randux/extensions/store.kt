@@ -24,9 +24,6 @@
 
 package io.github.koss.randux.extensions
 
-import arrow.core.Left
-import arrow.core.Option
-import io.github.koss.randux.utils.AsyncAction
 import io.github.koss.randux.utils.State
 import io.github.koss.randux.utils.Store
 import io.reactivex.Observable
@@ -44,6 +41,3 @@ val Store.globalStateRx: Observable<State>
 
         return subject
     }
-
-fun Store.dispatchAsync(action: AsyncAction): Option<Any> =
-    dispatch(Left(action))

@@ -27,7 +27,7 @@ package io.github.koss.randux.sample.examples.simpleasync
 import io.github.koss.randux.utils.Action
 import io.github.koss.randux.utils.AsyncAction
 
-object LoadSomething: AsyncAction()
+object LoadSomething: AsyncAction
 
 object BeginLoad: Action()
 

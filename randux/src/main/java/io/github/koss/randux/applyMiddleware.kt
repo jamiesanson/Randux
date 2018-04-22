@@ -24,8 +24,6 @@
 
 package io.github.koss.randux
 
-import arrow.core.Either
-import arrow.core.Option
 import io.github.koss.randux.utils.*
 
 /**
@@ -45,7 +43,7 @@ import io.github.koss.randux.utils.*
  * @returns [StoreEnhancer] A store enhancer applying the middleware.
  */
 fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
-        { createStore: StoreCreator -> inner@ { reducer: Reducer, initialState: Option<State> ->
+        { createStore: StoreCreator -> inner@ { reducer: Reducer, initialState: State? ->
             val store = createStore(reducer, initialState)
 
             var dispatch: Dispatch = { throw IllegalStateException(
@@ -57,7 +55,7 @@ fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
 
             val api = MiddlewareAPI(
                     getState = store::getState,
-                    dispatch = { action: Either<AsyncAction, Action> -> dispatch(action) }
+                    dispatch = { action: Action -> dispatch(action) }
             )
 
             chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()

@@ -24,9 +24,6 @@
 
 package io.github.koss.randux
 
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.Some
 import io.github.koss.randux.utils.Action
 import io.github.koss.randux.utils.ActionTypes
 import io.github.koss.randux.utils.Reducer
@@ -77,20 +74,20 @@ fun assertReducerShape(vararg reducers: Reducer) {
  */
 fun combineReducers(vararg reducers: Reducer): Reducer {
 
-    val shapeAssertionError: Option<Throwable> = try {
+    val shapeAssertionError: Throwable? = try {
         assertReducerShape(*reducers)
-        None
+        null
     } catch (e: Throwable) {
-        Some(e)
+        e
     }
 
-    return combination@ { previousState: State, action: Action ->
-        shapeAssertionError.exists {
-            throw it
+    return combination@ { previousState: State?, action: Action ->
+        shapeAssertionError?.run {
+            throw this
         }
 
         var hasChanged = false
-        var nextState: State = {}
+        var nextState: State? = {}
         reducers.map { reducer ->
             nextState = reducer(previousState, action)
             hasChanged = hasChanged || nextState != previousState

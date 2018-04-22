@@ -29,7 +29,7 @@ import io.github.koss.randux.utils.Reducer
 import io.github.koss.randux.utils.State
 
 class SimpleAsyncReducer: Reducer {
-    override fun invoke(currentState: State, incomingAction: Action): State =
+    override fun invoke(currentState: State?, incomingAction: Action): State? =
             when (incomingAction) {
                 BeginLoad -> Loading
                 FinishLoad -> Loaded

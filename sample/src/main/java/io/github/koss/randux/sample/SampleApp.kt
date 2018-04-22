@@ -25,8 +25,6 @@
 package io.github.koss.randux.sample
 
 import android.app.Application
-import arrow.core.Option
-import arrow.core.Some
 import io.github.koss.randux.applyMiddleware
 import io.github.koss.randux.combineReducers
 import io.github.koss.randux.createStore
@@ -42,8 +40,8 @@ class SampleApp: Application() {
 
     lateinit var component: SampleComponent
 
-    private val preloadedState: Option<State>
-        get() = Option.fromNullable(loadState())
+    private val preloadedState: State?
+        get() = loadState()
 
     override fun onCreate() {
         super.onCreate()
@@ -58,7 +56,7 @@ class SampleApp: Application() {
         store = createStore(
                 reducer = combineReducers(*reducers),
                 preloadedState = preloadedState,
-                enhancer = Some(applyMiddleware(*middleware))
+                enhancer = applyMiddleware(*middleware)
         )
     }
 

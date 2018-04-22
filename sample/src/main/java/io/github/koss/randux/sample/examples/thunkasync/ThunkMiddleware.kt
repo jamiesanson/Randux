@@ -1,10 +1,8 @@
 package io.github.koss.randux.sample.examples.thunkasync
 
-import arrow.core.Either
-import arrow.core.Option
 import io.github.koss.randux.utils.*
 
-typealias ThunkFunction = (Dispatch, () -> State) -> Option<Any>
+typealias ThunkFunction = (Dispatch, () -> State) -> Any?
 
 /**
  * Naive implementation of JS thunk middleware. This could likely be made better through the use of
@@ -12,11 +10,11 @@ typealias ThunkFunction = (Dispatch, () -> State) -> Option<Any>
  */
 class ThunkMiddleware: Middleware {
     override fun invoke(api: MiddlewareAPI): (next: Dispatch) -> Dispatch = { next -> inner@ { action ->
-        return@inner if (action is Either.Right) {
+        return@inner if (action !is AsyncAction) {
             try {
                 // Sadly, generics are the limiting factor for the moment which breaks a proper thunk implementation
                 @Suppress("UNCHECKED_CAST")
-                (action.b as ThunkFunction)(api.dispatch, api.getState)
+                (action as ThunkFunction)(api.dispatch, api.getState)
             } catch (e: Exception) {
                 // Pass to next middleware
                 next(action)
