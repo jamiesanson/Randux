@@ -42,7 +42,7 @@ class TestApp: Application() {
       store = createStore(
               reducer = combineReducers(*reducers),
               preloadedState = preloadedState,
-              enhancer = Some(applyMiddleware(*middleware))
+              enhancer = applyMiddleware(*middleware)
       )
   }
 }
