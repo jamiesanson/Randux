@@ -11,25 +11,6 @@ Define your app state, with as much nesting as you want. This must be parcelable
 
 ### App setup
 
-```kotlin
-@lenses
-@Parcelize
-data class AppState(
-  val homeState: HomeState = HomeState.Default,
-  val profileState: ProfileState = ProfileState.Default
-): Parcelable, State
-```
-
-Optionally define configuration:
-```kotlin
-class ReduxConfiguration: Configuration {
-
-  override fun getPersistenceType(): PersistenceType {
-    return Disk()
-  }
-}
-```
-
 In your application class, register the `Store`:
 
 ```kotlin
@@ -40,6 +21,7 @@ class TestApp: Application() {
   override fun onCreate() {
       val reducers = setOf<Reducer>()
       val middleware = setOf<Middleware>()
+      val preloadedState: AppState = Starting
 
       store = createStore(
               reducer = combineReducers(*reducers),
