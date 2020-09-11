@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.utils
+package randux.utils
 
 /**
  * This file is an implementation of signatures found in the official redux glossary. See here:

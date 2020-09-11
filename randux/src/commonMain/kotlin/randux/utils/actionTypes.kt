@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux.utils
+package randux.utils
 
 /**
  * Internal Redux ActionTypes

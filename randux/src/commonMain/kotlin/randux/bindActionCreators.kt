@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux
+package randux
 
-import io.github.koss.randux.utils.ActionCreator
-import io.github.koss.randux.utils.Dispatch
+import randux.utils.ActionCreator
+import randux.utils.Dispatch
 
 fun bindActionCreator(actionCreator: ActionCreator, dispatch: Dispatch): ActionCreator {
     return inner@ {

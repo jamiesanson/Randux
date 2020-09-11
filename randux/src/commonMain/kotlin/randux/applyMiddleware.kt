@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux
+package randux
 
-import io.github.koss.randux.utils.*
+import randux.utils.*
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -51,14 +51,12 @@ fun applyMiddleware(vararg middlewares: Middleware): StoreEnhancer =
                     "Other middleware would not be applied to this dispatch."
             )}
 
-            var chain: Array<(Dispatch) -> Dispatch> = emptyArray()
-
             val api = MiddlewareAPI(
                     getState = store::getState,
                     dispatch = { action: Action -> dispatch(action) }
             )
 
-            chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()
+            val chain = middlewares.map { middleware -> middleware(api) }.toTypedArray()
             dispatch = compose(*chain)(store.dispatch)
 
             return@inner store override dispatch
@@ -79,7 +77,7 @@ fun compose(vararg funcs: (Dispatch) -> Dispatch): (Dispatch) -> Dispatch {
         return funcs[0]
     }
 
-    return funcs.reduce {a, b -> { d: Dispatch -> a(b(d))}}
+    return funcs.reduce { a, b -> { d: Dispatch -> a(b(d))}}
 }
 
 /**

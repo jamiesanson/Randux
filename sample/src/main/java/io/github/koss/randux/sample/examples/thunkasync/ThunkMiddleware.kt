@@ -1,7 +1,5 @@
 package io.github.koss.randux.sample.examples.thunkasync
 
-import io.github.koss.randux.utils.*
-
 typealias ThunkFunction = (Dispatch, () -> State) -> Any?
 
 /**

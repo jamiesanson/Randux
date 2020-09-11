@@ -24,7 +24,7 @@
 
 package io.github.koss.randux.extensions
 
-import io.github.koss.randux.utils.*
+import randux.utils.*
 import io.reactivex.disposables.Disposable
 
 /**

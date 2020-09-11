@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux
+package randux
 
-import io.github.koss.randux.utils.*
-import java.util.*
+import randux.utils.*
 
 /**
  * Creates a Redux store that holds the state tree.
@@ -63,24 +62,14 @@ fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: Store
         private var currentReducer = reducer
         private var currentState = preloadedState
         private var currentListeners = mutableListOf<() -> Unit>()
-        private var nextListeners: Stack<() -> Unit> = Stack<() -> Unit>().apply {
-            currentListeners.forEach { listener -> push(listener) }
-        }
+        private var nextListeners = mutableListOf<() -> Unit>()
         private var isDispatching = false
 
         init {
             dispatch(ActionTypes.INIT)
         }
 
-        fun ensureCanMutateNextListeners() {
-            if (currentListeners == nextListeners) {
-                nextListeners = Stack<() -> Unit>().apply {
-                    currentListeners.forEach { listener -> push(listener) }
-                }
-            }
-        }
-
-        fun _getState(): State {
+        private fun getStateInternal(): State {
             if (isDispatching) {
                 throw IllegalStateException(
                         "You may not call store.getState() while the reducer is executing. " +
@@ -116,7 +105,6 @@ fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: Store
          * @returns {Function} A function to remove this change listener.
          */
         fun subscribe(listener: () -> Unit): () -> Unit {
-
             if (isDispatching) {
                 throw IllegalStateException(
                         "You may not call store.subscribe() while the reducer is executing. " +
@@ -127,9 +115,7 @@ fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: Store
 
             var isSubscribed = false
 
-            ensureCanMutateNextListeners()
-
-            nextListeners.push(listener)
+            nextListeners.add(listener)
 
             return unsubscribe@ {
                 if (!isSubscribed) {
@@ -143,8 +129,6 @@ fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: Store
                 }
 
                 isSubscribed = false
-
-                ensureCanMutateNextListeners()
 
                 nextListeners.remove(listener)
             }
@@ -183,8 +167,6 @@ fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: Store
                 )
             }
 
-            val act = action
-
             if (isDispatching) {
                 throw IllegalStateException(
                         "Reducers may not dispatch Actions"
@@ -193,18 +175,14 @@ fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: Store
 
             try {
                 isDispatching = true
-                currentState = currentReducer(currentState, act)
+                currentState = currentReducer(currentState, action)
             } finally {
                 isDispatching = false
             }
 
-            currentListeners = nextListeners.toMutableList().also {
-                it.map { listener ->
-                    listener()
-                }
-            }
+            currentListeners = nextListeners.onEach { it() }
 
-            return act
+            return action
         }
 
         /**
@@ -225,7 +203,7 @@ fun createStore(reducer: Reducer, preloadedState: State? = null, enhancer: Store
         override val dispatch: Dispatch
             get() = this::dispatch
         override val getState: () -> State
-            get() = this::_getState
+            get() = this::getStateInternal
         override val subscribe: (listener: () -> Unit) -> () -> Unit
             get() = this::subscribe
         override val replaceReducer: (reducer: Reducer) -> Unit

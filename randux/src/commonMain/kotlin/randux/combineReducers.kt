@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-package io.github.koss.randux
+package randux
 
-import io.github.koss.randux.utils.Action
-import io.github.koss.randux.utils.ActionTypes
-import io.github.koss.randux.utils.Reducer
-import io.github.koss.randux.utils.State
+import randux.utils.Action
+import randux.utils.ActionTypes
+import randux.utils.Reducer
+import randux.utils.State
+import kotlin.random.Random
 
 /**
  * Function for ensuring each reducer supplied is of correct form
@@ -35,14 +36,14 @@ import io.github.koss.randux.utils.State
 fun assertReducerShape(vararg reducers: Reducer) {
     reducers.forEach { reducer ->
         val initial = object : State() {
-            val _internal = Math.random()
+            val _internal = Random.Default.nextInt()
         }
 
         val initialState = reducer(initial, ActionTypes.INIT)
 
         if (initialState != initial) {
             throw IllegalArgumentException(
-                    "Reducer ${reducer::class.java.simpleName} " +
+                    "Reducer ${reducer::class.simpleName} " +
                             "returned undefined during initialization. " +
                             "If the state passed to the reducer is undefined, you must " +
                             "explicitly return the initial state. The initial state may " +
@@ -52,10 +53,10 @@ fun assertReducerShape(vararg reducers: Reducer) {
         }
 
         val type = "@@randux/PROBE_UNKNOWN_ACTION_" +
-                Math.random().toString()
+                Random.Default.nextInt().toString()
         if (reducer(initial, { type }) != initial) {
             throw IllegalArgumentException(
-                    "Reducer ${reducer::class.java.simpleName} returned undefined when probed with a random type." +
+                    "Reducer ${reducer::class.simpleName} returned undefined when probed with a random type." +
                             "Don't try to handle ${ActionTypes.INIT} or other actions in the randux " +
                             "namespace. They are considered private. Instead, you must return the " +
                             "current state for any unknown actions, unless it is undefined, " +

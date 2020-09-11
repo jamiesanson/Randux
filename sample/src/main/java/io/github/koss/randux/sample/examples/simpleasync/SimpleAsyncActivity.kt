@@ -28,9 +28,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import io.github.koss.randux.applyMiddleware
 import io.github.koss.randux.createStore
-import io.github.koss.randux.extensions.globalStateRx
 import io.github.koss.randux.sample.R
-import io.github.koss.randux.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_sample_async.*

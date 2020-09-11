@@ -24,8 +24,9 @@
 
 package io.github.koss.randux.extensions
 
-import io.github.koss.randux.utils.State
-import io.github.koss.randux.utils.Store
+import android.annotation.SuppressLint
+import randux.utils.State
+import randux.utils.Store
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -34,9 +35,10 @@ import io.reactivex.subjects.PublishSubject
  * that disposing doesn't unsubscribe all observers
  */
 val Store.globalStateRx: Observable<State>
+    @SuppressLint("CheckResult")
     get() {
         val subject = PublishSubject.create<State>()
-        val unsubscribe = subscribe({ subject.onNext(getState()) })
+        val unsubscribe = subscribe { subject.onNext(getState()) }
         subject.doOnDispose { unsubscribe() }
 
         return subject
